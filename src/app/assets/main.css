@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.container {
+    padding: 60px 100px;
+    background-color: rgb(242, 242, 242);
+}
