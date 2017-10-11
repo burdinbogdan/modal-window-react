@@ -25,5 +25,4 @@ export default connect(
     state => ({
         itemsState: state.itemsState,
     }),
-    dispatch => ({})
 )(PickerList);

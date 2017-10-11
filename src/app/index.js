@@ -12,7 +12,6 @@ import reducer from './reducers';
 
 const store = createStore(reducer);
 
-
 ReactDOM.render(
     <div className="container">
 		<Provider store={store}>

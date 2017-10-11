@@ -2,7 +2,11 @@
   "name": "react-app",
   "version": "0.1.0",
   "private": true,
-  "devDependencies": {
+  "devDependencies": {},
+  "dependencies": {
+    "@storybook/addon-actions": "^3.2.12",
+    "@storybook/addon-links": "^3.2.12",
+    "@storybook/react": "^3.2.12",
     "autoprefixer-loader": "^3.2.0",
     "babel-core": "^6.18.2",
     "babel-loader": "^7.0.0",
@@ -10,6 +14,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.18.0",
     "css-loader": "^0.28.7",
+    "express": "^4.16.2",
     "file-loader": "^1.1.5",
     "html-webpack-plugin": "^2.24.1",
     "node-sass": "^4.5.3",
@@ -18,11 +23,6 @@
     "transfer-webpack-plugin": "^0.1.4",
     "webpack": "^2.4.1",
     "webpack-dev-server": "^2.4.2",
-    "@storybook/react": "^3.2.12",
-    "@storybook/addon-actions": "^3.2.12",
-    "@storybook/addon-links": "^3.2.12"
-  },
-  "dependencies": {
     "material-ui": "^0.19.3",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
@@ -31,7 +31,10 @@
     "redux": "3.7.2"
   },
   "scripts": {
-    "start": "webpack-dev-server --config webpack-dev-server.config.js --progress --inline --colors",
+    "prestart": "npm install",
+    "postinstall": "build-storybook",
+    "start": "node server.js",
+    "dev": "webpack-dev-server --config webpack-dev-server.config.js --progress --inline --colors",
     "build": "webpack --config webpack-production.config.js --progress --colors",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
