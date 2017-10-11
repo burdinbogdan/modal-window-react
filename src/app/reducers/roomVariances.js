@@ -20,7 +20,7 @@ const initialState = [{
     id: 5,
     type: "Quadro",
     num: 4
-}]
+}];
 
 export default function(state = initialState, action) {
     return state;

@@ -1,18 +1,13 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import PickerList from './PickerList';
-
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import FlatButton from 'material-ui/FlatButton';
 import AppBar  from 'material-ui/AppBar';
 import IconButton  from 'material-ui/IconButton';
 import Paper  from 'material-ui/Paper';
-import SelectField  from 'material-ui/SelectField';
-import MenuItem  from 'material-ui/MenuItem';
-import TextField  from 'material-ui/TextField';
-import FloatingActionButton  from 'material-ui/FloatingActionButton';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
 const styles = {
@@ -73,60 +68,70 @@ const styles = {
     }
 };
 
-var closeModalWindow = function() {
+var closeModalWindow = function(callback) {
     return () => {
         document.getElementsByClassName('modal-window')[0].style.display = 'none';
+        if(callback) callback();
     }
 }
+class ModalWindow extends React.Component {
+  constructor(props){
+    super();
+    this.title = props.title;
+    this.addSelectFieldState = props.addSelectFieldState.bind(this);
+    props.recoveryState();
+    this.saveState = props.saveState.bind(this);
+    this.undoState = props.undoState.bind(this);
+  }
+  render() {
+    return(
+        <MuiThemeProvider >
+            <Paper className="modal-window" style={styles.modalWindow} zDepth={1} >
+       
+                <AppBar style={styles.appBar.style}
+                        titleStyle={styles.appBar.titleStyle}
+                        title={this.title}
+                        showMenuIconButton={false}
+                        iconElementRight=
+                    {
+                      <IconButton onClick={closeModalWindow(this.undoState)} 
+                                  iconStyle={styles.appBar.iconStyle}>
+                        <NavigationClose />
+                      </IconButton>}/>
 
-const ModalWindow = (props) => (
-  <MuiThemeProvider>
-      <Paper className="modal-window" style={styles.modalWindow} zDepth={1} >
- 
-          <AppBar style={styles.appBar.style}
-                  titleStyle={styles.appBar.titleStyle}
-                  title={props.title}
-                  showMenuIconButton={false}
-                  iconElementRight=
-              {
-                <IconButton onClick={closeModalWindow()} 
-                            iconStyle={styles.appBar.iconStyle}>
-                  <NavigationClose />
-                </IconButton>}/>
+                <div> 
+                  <PickerList />
+                  <FlatButton label="Добавить" 
+                              primary={true} 
+                              style={styles.flatButton.style}
+                              labelStyle={styles.PickerList.button.labelStyle} 
+                              onClick={this.addSelectFieldState}/>
+                </div>
 
-          <div> 
-            <PickerList />
-            <FlatButton label="Добавить" 
-                        primary={true} 
-                        style={styles.flatButton.style}
-                        labelStyle={styles.PickerList.button.labelStyle} 
-                        onClick={props.addSelectFieldState}/>
-          </div>
+                <div  style={styles.buttons}>
+                  <FlatButton style={styles.buttons.button.save} 
+                              labelStyle={styles.flatButton.labelStyle, styles.flatButton.labelStyle} 
+                              label="Сохранить" 
+                              hoverColor="rgb(82, 216, 255)"
+                              backgroundColor="rgb(31, 185, 230)"
+                              onClick={closeModalWindow(this.saveState)}/>
+                  <FlatButton style={styles.buttons.button.style} 
+                              labelStyle={styles.flatButton.labelStyle} 
+                              label="Отмена" 
+                              onClick={closeModalWindow(this.undoState)}/>
+                </div>
 
-          <div  style={styles.buttons}>
-            <FlatButton style={styles.buttons.button.save} 
-                        labelStyle={styles.flatButton.labelStyle, styles.flatButton.labelStyle} 
-                        label="Сохранить" 
-                        hoverColor="rgb(82, 216, 255)"
-                        backgroundColor="rgb(31, 185, 230)"
-                        onClick={closeModalWindow()}/>
-            <FlatButton style={styles.buttons.button.style} 
-                        labelStyle={styles.flatButton.labelStyle} 
-                        label="Отмена" 
-                        onClick={closeModalWindow()}/>
-          </div>
-
-      </Paper>
-  </MuiThemeProvider>
-);
-
+            </Paper>
+        </MuiThemeProvider>
+      );
+    }
+}
 export default connect(
-    state => ({
-
-    }),
+    state => ({}),
     dispatch => ({
-        addSelectFieldState: () => {
-            dispatch({ type: 'ADD_STATE', id: Date.now() });
-        }
+        addSelectFieldState: () => dispatch({ type: 'ADD_STATE', id: Date.now() }),
+        recoveryState: () => dispatch({ type: 'RECOVERY_STATE' }),
+        saveState: () => dispatch({ type: 'SAVE_STATE' }),
+        undoState: () => dispatch({ type: 'UNDO_STATE' }),
     })
 )(ModalWindow);
